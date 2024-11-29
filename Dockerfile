@@ -1,10 +1,16 @@
-FROM python:3.x-slim as builder
+# Use a specific Python version
+FROM python:3.10-slim as builder
+
 WORKDIR /app
 COPY requirements.txt .
-RUN pip instal --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-FROM python:3.x-slim
+# Final stage
+FROM python:3.10-slim
+
 WORKDIR /app
 COPY --from=builder /app /app
 COPY . .
+
+EXPOSE 7000
 CMD ["python", "app.py"]
