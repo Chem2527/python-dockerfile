@@ -1,8 +1,10 @@
-FROM python:latest
+FROM python:3.x-slim as builder
 WORKDIR /app
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-COPY . .
-EXPOSE 7000
-ENTRYPOINT ["python", "app.py"]
+RUN pip instal --no-cache-dir -r requirements.txt
 
+FROM python:3.x-slim
+WORKDIR /app
+COPY --from=builder /app /app
+COPY . .
+CMD ["python", "app.py"]
